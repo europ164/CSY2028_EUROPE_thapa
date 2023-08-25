@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  php:
+    build:
+      context: ./as1/php
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - ./as1/php/src:/var/www/html/
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+        MYSQL_DATABASE: assignment1
+        MYSQL_USER: MYSQL_USER
+        MYSQL_PASSWORD: MYSQL_PASSWORD
+    volumes:
+      - ./as1/php/database.sql:/docker-entrypoint-initdb.d/0_init.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
